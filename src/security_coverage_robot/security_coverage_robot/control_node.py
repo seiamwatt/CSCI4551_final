@@ -35,10 +35,17 @@ class ControlNode(Node):
         self.obstacle_right = False
 
         # Wall recovery state machine
-        # States: 'none', 'backup', 'turn'
+        # States: 'none', 'backup', 'spin', 'face_best'
         self.recovery_state = 'none'
         self.recovery_start_time = None
         self.recovery_turn_dir = 1.0  # 1.0 = left, -1.0 = right
+
+        # Spin recovery tracking
+        self.spin_start_yaw = 0.0
+        self.best_dir_yaw = 0.0
+        self.best_dir_dist = 0.0
+        self.spin_passed_start = False
+        self.min_front_dist = float('inf')
 
         # Stuck detection
         self.waypoint_start_time = None
@@ -229,54 +236,71 @@ class ControlNode(Node):
 
             if self.recovery_state == 'backup':
                 # Reverse for 2 seconds
-                if elapsed < 2.0:
+                if elapsed < 4.0:
                     self.publish_cmd(-0.2, 0.0)
                     return
                 else:
-                    # Done backing up — try turning left first
-                    self.recovery_state = 'turn_left'
+                    # Done backing up — start spinning to scan all directions
+                    self.recovery_state = 'spin'
                     self.recovery_start_time = self.get_clock().now()
-                    self.get_logger().info('Backup done — trying left')
+                    self.spin_start_yaw = self.robot_yaw
+                    self.best_dir_yaw = self.robot_yaw
+                    self.best_dir_dist = 0.0
+                    self.spin_passed_start = False
+                    self.get_logger().info('Backup done — spinning to find best direction')
                     return
 
-            elif self.recovery_state == 'turn_left':
-                # Turn left for 2 seconds
-                if elapsed < 2.0:
-                    self.publish_cmd(0.0, max_angular)
-                    return
-                else:
-                    # Check if front is now clear
-                    if not self.obstacle_ahead:
-                        # Left worked — resume normal navigation
-                        self.recovery_state = 'none'
-                        self.recovery_start_time = None
-                        self.get_logger().info('Left is clear — resuming')
-                        return
-                    else:
-                        # Left didn't work — try right (turn 4 sec to go past original heading)
-                        self.recovery_state = 'turn_right'
-                        self.recovery_start_time = self.get_clock().now()
-                        self.get_logger().info('Left blocked — trying right')
-                        return
+            elif self.recovery_state == 'spin':
+                # Spin a full 360° while tracking which direction has the most clearance
+                self.publish_cmd(0.0, max_angular)
 
-            elif self.recovery_state == 'turn_right':
-                # Turn right for 4 seconds (undo left turn + go right)
-                if elapsed < 4.0:
-                    self.publish_cmd(0.0, -max_angular)
+                # Track the best direction (where front is most clear)
+                if self.min_front_dist > self.best_dir_dist:
+                    self.best_dir_dist = self.min_front_dist
+                    self.best_dir_yaw = self.robot_yaw
+
+                # Check if we've completed a full rotation
+                yaw_diff = abs(self.normalize_angle(self.robot_yaw - self.spin_start_yaw))
+                if elapsed > 1.0 and yaw_diff > 0.3:
+                    self.spin_passed_start = True
+                if self.spin_passed_start and yaw_diff < 0.3 and elapsed > 3.0:
+                    # Full spin done — now turn to face the best direction
+                    self.recovery_state = 'face_best'
+                    self.recovery_start_time = self.get_clock().now()
+                    self.get_logger().info(
+                        f'Spin done — best direction has {self.best_dir_dist:.2f}m clearance'
+                    )
                     return
-                else:
-                    if not self.obstacle_ahead:
-                        # Right worked — resume
-                        self.recovery_state = 'none'
-                        self.recovery_start_time = None
-                        self.get_logger().info('Right is clear — resuming')
-                        return
-                    else:
-                        # Both sides blocked — backup again
-                        self.recovery_state = 'backup'
-                        self.recovery_start_time = self.get_clock().now()
-                        self.get_logger().warn('Both sides blocked — backing up again')
-                        return
+
+                # Safety: if spin takes too long (>15s), just pick current best
+                if elapsed > 15.0:
+                    self.recovery_state = 'face_best'
+                    self.recovery_start_time = self.get_clock().now()
+                    return
+
+                return
+
+            elif self.recovery_state == 'face_best':
+                # Turn to face the best direction found during spin
+                yaw_error = self.normalize_angle(self.best_dir_yaw - self.robot_yaw)
+
+                if abs(yaw_error) < 0.15:
+                    # Facing the best direction — resume normal navigation
+                    self.recovery_state = 'none'
+                    self.recovery_start_time = None
+                    self.get_logger().info('Facing clear direction — resuming')
+                    return
+
+                # Safety timeout
+                if elapsed > 5.0:
+                    self.recovery_state = 'none'
+                    self.recovery_start_time = None
+                    return
+
+                # Turn toward best direction
+                turn_speed = max_angular if yaw_error > 0 else -max_angular
+                self.publish_cmd(0.0, turn_speed)
+                return
 
         # ---- Obstacle avoidance ---- #
         if self.obstacle_ahead:
