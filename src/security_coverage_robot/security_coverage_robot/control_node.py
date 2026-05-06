@@ -228,48 +228,62 @@ class ControlNode(Node):
             elapsed = (self.get_clock().now() - self.recovery_start_time).nanoseconds / 1e9
 
             if self.recovery_state == 'backup':
-                # Reverse for 1.5 seconds
-                if elapsed < 1.5:
-                    self.publish_cmd(-0.15, 0.0)
+                # Reverse for 2 seconds
+                if elapsed < 2.0:
+                    self.publish_cmd(-0.2, 0.0)
                     return
                 else:
-                    # Switch to turning
-                    self.recovery_state = 'turn'
+                    # Done backing up — try turning left first
+                    self.recovery_state = 'turn_left'
                     self.recovery_start_time = self.get_clock().now()
+                    self.get_logger().info('Backup done — trying left')
                     return
 
-            elif self.recovery_state == 'turn':
-                # Turn for 2 seconds
+            elif self.recovery_state == 'turn_left':
+                # Turn left for 2 seconds
                 if elapsed < 2.0:
-                    self.publish_cmd(0.0, max_angular * self.recovery_turn_dir)
+                    self.publish_cmd(0.0, max_angular)
                     return
                 else:
-                    # Recovery done
-                    self.recovery_state = 'none'
-                    self.recovery_start_time = None
+                    # Check if front is now clear
+                    if not self.obstacle_ahead:
+                        # Left worked — resume normal navigation
+                        self.recovery_state = 'none'
+                        self.recovery_start_time = None
+                        self.get_logger().info('Left is clear — resuming')
+                        return
+                    else:
+                        # Left didn't work — try right (turn 4 sec to go past original heading)
+                        self.recovery_state = 'turn_right'
+                        self.recovery_start_time = self.get_clock().now()
+                        self.get_logger().info('Left blocked — trying right')
+                        return
+
+            elif self.recovery_state == 'turn_right':
+                # Turn right for 4 seconds (undo left turn + go right)
+                if elapsed < 4.0:
+                    self.publish_cmd(0.0, -max_angular)
                     return
+                else:
+                    if not self.obstacle_ahead:
+                        # Right worked — resume
+                        self.recovery_state = 'none'
+                        self.recovery_start_time = None
+                        self.get_logger().info('Right is clear — resuming')
+                        return
+                    else:
+                        # Both sides blocked — backup again
+                        self.recovery_state = 'backup'
+                        self.recovery_start_time = self.get_clock().now()
+                        self.get_logger().warn('Both sides blocked — backing up again')
+                        return
 
         # ---- Obstacle avoidance ---- #
         if self.obstacle_ahead:
-            # Always backup first, then turn to a clear direction
             self.recovery_state = 'backup'
             self.recovery_start_time = self.get_clock().now()
-
-            # Pick turn direction: toward the clearer side
-            if self.obstacle_left and not self.obstacle_right:
-                self.recovery_turn_dir = -1.0  # turn right
-            elif self.obstacle_right and not self.obstacle_left:
-                self.recovery_turn_dir = 1.0   # turn left
-            else:
-                # Both blocked or neither — turn away from target heading
-                # (since target is behind the wall)
-                self.recovery_turn_dir = 1.0 if angle_error <= 0 else -1.0
-
-            self.get_logger().info(
-                f'Wall hit — backing up then turning '
-                f'{"left" if self.recovery_turn_dir > 0 else "right"}'
-            )
-            self.publish_cmd(-0.15, 0.0)
+            self.get_logger().info('Wall detected — backing up')
+            self.publish_cmd(-0.2, 0.0)
             return
 
         # ---- Proportional navigation ---- #
