@@ -251,23 +251,25 @@ class ControlNode(Node):
 
         # ---- Obstacle avoidance ---- #
         if self.obstacle_ahead:
-            if self.obstacle_left and self.obstacle_right:
-                # Boxed in — enter recovery: backup then turn
-                self.recovery_state = 'backup'
-                self.recovery_start_time = self.get_clock().now()
-                # Turn away from the target since forward is blocked
-                self.recovery_turn_dir = 1.0 if angle_error <= 0 else -1.0
-                self.publish_cmd(-0.15, 0.0)
-                return
-            elif self.obstacle_left and not self.obstacle_right:
-                # Left blocked → turn right
-                self.publish_cmd(0.0, -max_angular)
+            # Always backup first, then turn to a clear direction
+            self.recovery_state = 'backup'
+            self.recovery_start_time = self.get_clock().now()
+
+            # Pick turn direction: toward the clearer side
+            if self.obstacle_left and not self.obstacle_right:
+                self.recovery_turn_dir = -1.0  # turn right
             elif self.obstacle_right and not self.obstacle_left:
-                # Right blocked → turn left
-                self.publish_cmd(0.0, max_angular)
+                self.recovery_turn_dir = 1.0   # turn left
             else:
-                # Only front blocked → turn toward clearer side
-                self.publish_cmd(0.0, max_angular if angle_error >= 0 else -max_angular)
+                # Both blocked or neither — turn away from target heading
+                # (since target is behind the wall)
+                self.recovery_turn_dir = 1.0 if angle_error <= 0 else -1.0
+
+            self.get_logger().info(
+                f'Wall hit — backing up then turning '
+                f'{"left" if self.recovery_turn_dir > 0 else "right"}'
+            )
+            self.publish_cmd(-0.15, 0.0)
             return
 
         # ---- Proportional navigation ---- #
