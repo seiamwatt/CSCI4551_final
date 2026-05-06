@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import PoseStamped, Twist
+from geometry_msgs.msg import PoseStamped, Twist, TwistStamped
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import String
@@ -34,6 +34,12 @@ class ControlNode(Node):
         self.obstacle_left = False
         self.obstacle_right = False
 
+        # Wall recovery state machine
+        # States: 'none', 'backup', 'turn'
+        self.recovery_state = 'none'
+        self.recovery_start_time = None
+        self.recovery_turn_dir = 1.0  # 1.0 = left, -1.0 = right
+
         # Stuck detection
         self.waypoint_start_time = None
 
@@ -55,10 +61,7 @@ class ControlNode(Node):
         )
 
         # --- Publishers ---
-        # NOTE: TurtleBot3 / ros_gz_bridge defaults expect plain Twist on
-        # /cmd_vel. If your stack uses ros2_control's diff_drive_controller
-        # (TwistStamped), swap the type here and the publish_cmd helper below.
-        self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.cmd_pub = self.create_publisher(TwistStamped, '/cmd_vel', 10)
         self.reached_pub = self.create_publisher(String, '/waypoint_reached', 10)
         self.status_pub = self.create_publisher(String, '/control_status', 10)
 
@@ -166,28 +169,18 @@ class ControlNode(Node):
         self.target_y = None
         self.waypoint_start_time = None
 
-    def publish_skipped(self):
-        """Tell the planner we are skipping this waypoint (e.g. red zone)."""
-        msg = String()
-        msg.data = f'skipped,{self.target_x:.3f},{self.target_y:.3f}'
-        self.status_pub.publish(msg)
-        self.get_logger().info(
-            f'Skipping waypoint ({self.target_x:.2f}, {self.target_y:.2f})'
-        )
-        self.target_x = None
-        self.target_y = None
-        self.waypoint_start_time = None
-
     # ------------------------------------------------------------------ #
     #  Control loop
     # ------------------------------------------------------------------ #
 
     def publish_cmd(self, linear_x, angular_z):
-        """Send a velocity command to the robot."""
-        twist = Twist()
-        twist.linear.x = float(linear_x)
-        twist.angular.z = float(angular_z)
-        self.cmd_pub.publish(twist)
+        """Wrap velocity into TwistStamped and publish."""
+        stamped = TwistStamped()
+        stamped.header.stamp = self.get_clock().now().to_msg()
+        stamped.header.frame_id = 'base_link'
+        stamped.twist.linear.x = linear_x
+        stamped.twist.angular.z = angular_z
+        self.cmd_pub.publish(stamped)
 
     def control_loop(self):
         """Navigate to waypoint while avoiding obstacles and respecting zones."""
@@ -197,11 +190,10 @@ class ControlNode(Node):
             self.publish_cmd(0.0, 0.0)
             return
 
-        # ---- Red zone → skip without claiming we covered it ---- #
+        # ---- Red zone → skip immediately ---- #
         if self.current_zone == 'red':
             self.get_logger().info('In red zone (CCTV covered) — skipping waypoint')
-            self.publish_cmd(0.0, 0.0)
-            self.publish_skipped()
+            self.publish_reached()
             return
 
         max_linear = self.get_parameter('linear_speed').value
@@ -231,19 +223,50 @@ class ControlNode(Node):
             self.publish_reached()
             return
 
+        # ---- Wall recovery state machine ---- #
+        if self.recovery_state != 'none':
+            elapsed = (self.get_clock().now() - self.recovery_start_time).nanoseconds / 1e9
+
+            if self.recovery_state == 'backup':
+                # Reverse for 1.5 seconds
+                if elapsed < 1.5:
+                    self.publish_cmd(-0.15, 0.0)
+                    return
+                else:
+                    # Switch to turning
+                    self.recovery_state = 'turn'
+                    self.recovery_start_time = self.get_clock().now()
+                    return
+
+            elif self.recovery_state == 'turn':
+                # Turn for 2 seconds
+                if elapsed < 2.0:
+                    self.publish_cmd(0.0, max_angular * self.recovery_turn_dir)
+                    return
+                else:
+                    # Recovery done
+                    self.recovery_state = 'none'
+                    self.recovery_start_time = None
+                    return
+
         # ---- Obstacle avoidance ---- #
         if self.obstacle_ahead:
-            if self.obstacle_left and not self.obstacle_right:
-                # left blocked → turn right
+            if self.obstacle_left and self.obstacle_right:
+                # Boxed in — enter recovery: backup then turn
+                self.recovery_state = 'backup'
+                self.recovery_start_time = self.get_clock().now()
+                # Turn away from the target since forward is blocked
+                self.recovery_turn_dir = 1.0 if angle_error <= 0 else -1.0
+                self.publish_cmd(-0.15, 0.0)
+                return
+            elif self.obstacle_left and not self.obstacle_right:
+                # Left blocked → turn right
                 self.publish_cmd(0.0, -max_angular)
             elif self.obstacle_right and not self.obstacle_left:
-                # right blocked → turn left
+                # Right blocked → turn left
                 self.publish_cmd(0.0, max_angular)
-            elif self.obstacle_left and self.obstacle_right:
-                # both sides blocked → reverse briefly and turn
-                self.publish_cmd(-0.1, max_angular)
             else:
-                # only front blocked → turn toward the target direction
+                # Only front blocked → turn toward clearer side
                 self.publish_cmd(0.0, max_angular if angle_error >= 0 else -max_angular)
             return
 
