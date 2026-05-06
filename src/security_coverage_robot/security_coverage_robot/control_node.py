@@ -15,7 +15,7 @@ class ControlNode(Node):
         self.declare_parameter('linear_speed', 0.3)
         self.declare_parameter('angular_speed', 0.5)
         self.declare_parameter('goal_tolerance', 0.3)
-        self.declare_parameter('obstacle_distance', 0.4)
+        self.declare_parameter('obstacle_distance', 0.8)
         self.declare_parameter('kp_linear', 0.5)
         self.declare_parameter('kp_angular', 1.5)
         self.declare_parameter('stuck_timeout', 10.0)  # seconds before declaring stuck
