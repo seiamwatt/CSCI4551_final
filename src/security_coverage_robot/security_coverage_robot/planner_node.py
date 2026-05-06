@@ -9,7 +9,7 @@ import math
 import numpy as np
 from collections import deque
 
-
+# V2
 class CellState:
     UNKNOWN = 0
     FREE = 1
@@ -177,12 +177,7 @@ class PlannerNode(Node):
                     self.cell_state[gr][gc] = CellState.OBSTACLE
 
     def zone_callback(self, msg):
-        """Update grid with zone color from perception node.
-
-        NOTE: Visit counting is NOT done here — it happens when a waypoint
-        is reached (reached_callback), so that we only count actual coverage
-        passes, not repeated color detections.
-        """
+        """Update grid with zone color from perception node."""
         if self.robot_row is None or self.robot_col is None:
             return
 
@@ -215,7 +210,6 @@ class PlannerNode(Node):
         elif color == 'blue':
             if self.cell_state[row][col] != CellState.OBSTACLE:
                 self.cell_state[row][col] = CellState.FREE
-            # Mark as already fully explored — don't increment visit_count
             self.visit_count[row][col] = max(
                 self.visit_count[row][col],
                 self.required_visits[row][col]
@@ -224,12 +218,7 @@ class PlannerNode(Node):
                 self.get_logger().info(f'Cell ({row},{col}) BLUE — already explored')
 
     def reached_callback(self, msg):
-        """Control node reports that a waypoint was reached.
-
-        This is where we count an actual visit to the cell. We validate that
-        the reported position matches the dispatched cell — otherwise a stale
-        message could credit a visit to the wrong cell.
-        """
+        """Control node reports that a waypoint was reached."""
         self.waiting_for_reach = False
 
         if self.sent_waypoint_row is None or self.sent_waypoint_col is None:
@@ -254,7 +243,6 @@ class PlannerNode(Node):
                 )
                 return
         except (ValueError, AttributeError):
-            # Older messages without coords — fall through and credit the visit
             pass
 
         self.visit_count[r][c] += 1
@@ -272,6 +260,8 @@ class PlannerNode(Node):
             self.get_logger().warn('Robot stuck — skipping waypoint and replanning')
             self.sent_waypoint_row = None
             self.sent_waypoint_col = None
+            # Force a full replan on next tick
+            self.tree_built = False
         elif data.startswith('skipped'):
             self.waiting_for_reach = False
             self.get_logger().info('Waypoint skipped by control node')
@@ -279,20 +269,34 @@ class PlannerNode(Node):
             self.sent_waypoint_col = None
 
     # ------------------------------------------------------------------ #
-    #  Spanning tree
+    #  Spanning tree  (FIX 1: include frontier/UNKNOWN neighbors)
     # ------------------------------------------------------------------ #
 
     def get_neighbors(self, row, col):
-        """Return traversable (FREE) 4-connected neighbors."""
+        """Return traversable 4-connected neighbors.
+
+        A neighbor is traversable if it is FREE *or* UNKNOWN (frontier).
+        This lets the spanning tree extend into unexplored territory so the
+        robot actually explores the environment instead of only re-covering
+        already-known cells.
+        """
         neighbors = []
         for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             nr, nc = row + dr, col + dc
-            if self.in_bounds(nr, nc) and self.cell_state[nr][nc] == CellState.FREE:
+            if self.in_bounds(nr, nc) and self.cell_state[nr][nc] in (
+                CellState.FREE, CellState.UNKNOWN
+            ):
                 neighbors.append((nr, nc))
         return neighbors
 
     def build_spanning_tree(self, start_row, start_col):
-        """BFS spanning tree from the robot's current position."""
+        """BFS spanning tree from the robot's current position.
+
+        FIX 2: The tree now grows through UNKNOWN cells so the robot can
+        reach frontiers.  We still *prefer* FREE cells by processing them
+        first (BFS naturally does this since FREE cells near the robot are
+        enqueued earlier).
+        """
         self.parent = {}
         visited = set()
         queue = deque()
@@ -329,8 +333,6 @@ class PlannerNode(Node):
         path = []
         visited = set()
 
-        # Iterative DFS using an explicit stack.
-        # Stack items: (node, child_index)
         stack = [((start_row, start_col), 0)]
         visited.add((start_row, start_col))
         path.append((start_row, start_col))
@@ -340,7 +342,6 @@ class PlannerNode(Node):
             kids = children.get(node, [])
 
             if ci < len(kids):
-                # Move to the next unvisited child
                 stack[-1] = (node, ci + 1)
                 child = kids[ci]
                 if child not in visited:
@@ -348,15 +349,11 @@ class PlannerNode(Node):
                     path.append(child)
                     stack.append((child, 0))
             else:
-                # All children processed — backtrack
                 stack.pop()
                 if stack:
-                    path.append(stack[-1][0])  # return to parent
+                    path.append(stack[-1][0])
 
-        # Add extra visits for cells that still need passes after this path.
-        # Compare planned occurrences against required_visits and any visits
-        # that have already happened — only top up the difference, so we
-        # never over-visit yellow cells.
+        # Add extra visits for yellow cells that still need more passes
         path_counts = {}
         for cell in path:
             path_counts[cell] = path_counts.get(cell, 0) + 1
@@ -381,13 +378,50 @@ class PlannerNode(Node):
 
     def needs_more_visits(self, row, col):
         if self.cell_state[row][col] in (
-            CellState.OBSTACLE, CellState.RED, CellState.UNKNOWN
+            CellState.OBSTACLE, CellState.RED
         ):
             return False
+        # FIX 3: UNKNOWN cells are "needed" — the robot must visit them to
+        # reveal what's there.  Without this the planner ignores the entire
+        # frontier and runs out of work.
+        if self.cell_state[row][col] == CellState.UNKNOWN:
+            return True
         return self.visit_count[row][col] < self.required_visits[row][col]
 
+    def find_nearest_frontier(self, row, col):
+        """BFS from (row,col) to find the nearest FREE cell adjacent to an
+        UNKNOWN cell.  Returns (fr, fc) or None.
+
+        This is the fallback when the spanning-tree path is exhausted but
+        there are still UNKNOWN cells bordering the known area.
+        """
+        visited = set()
+        queue = deque()
+        queue.append((row, col))
+        visited.add((row, col))
+
+        while queue:
+            r, c = queue.popleft()
+            # A FREE cell is a frontier if at least one neighbor is UNKNOWN
+            if self.cell_state[r][c] == CellState.FREE:
+                for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    nr, nc = r + dr, c + dc
+                    if (self.in_bounds(nr, nc)
+                            and self.cell_state[nr][nc] == CellState.UNKNOWN):
+                        return (r, c)
+            # Expand BFS through FREE cells only (safe to drive through)
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nr, nc = r + dr, c + dc
+                if (self.in_bounds(nr, nc)
+                        and (nr, nc) not in visited
+                        and self.cell_state[nr][nc] == CellState.FREE):
+                    visited.add((nr, nc))
+                    queue.append((nr, nc))
+
+        return None
+
     # ------------------------------------------------------------------ #
-    #  Main planning loop
+    #  Main planning loop  (FIX 4: frontier-driven exploration)
     # ------------------------------------------------------------------ #
 
     def planning_loop(self):
@@ -407,20 +441,21 @@ class PlannerNode(Node):
             self.cell_state[row][col] = CellState.FREE
 
         # Count free cells to decide if tree needs rebuilding
-        free_count = int(np.sum(self.cell_state == CellState.FREE))
+        free_count = int(np.sum(
+            (self.cell_state == CellState.FREE)
+            | (self.cell_state == CellState.UNKNOWN)
+        ))
 
         if free_count == 0:
             self.publish_metrics()
             return
 
-        # Rebuild only on first run, when the path is exhausted, or when the
-        # frontier has actually grown a lot — avoids thrashing on every lidar
-        # scan.
+        # FIX 5: Rebuild when (a) first run, (b) path exhausted, (c) stuck
+        # forced a reset, or (d) significant new area discovered.
         need_rebuild = (
             not self.tree_built
             or self.current_path_index >= len(self.coverage_path)
-            or free_count > max(self.last_tree_size + 10,
-                                int(self.last_tree_size * 1.5))
+            or free_count > self.last_tree_size + 5
         )
 
         if need_rebuild:
@@ -429,33 +464,48 @@ class PlannerNode(Node):
             self.current_path_index = 0
             self.tree_built = True
 
-        # Follow coverage path
-        if self.current_path_index < len(self.coverage_path):
-            # Skip red / obstacle / already-complete cells
-            while self.current_path_index < len(self.coverage_path):
-                tr, tc = self.coverage_path[self.current_path_index]
-                if self.cell_state[tr][tc] in (CellState.RED, CellState.OBSTACLE):
-                    self.current_path_index += 1
-                    continue
-                if not self.needs_more_visits(tr, tc):
-                    self.current_path_index += 1
-                    continue
-                break
-            else:
-                # Exhausted the path — check for remaining uncovered cells below
-                self.current_path_index = len(self.coverage_path)
+        # Follow coverage path — skip completed / obstacle / red cells
+        waypoint_sent = False
+        while self.current_path_index < len(self.coverage_path):
+            tr, tc = self.coverage_path[self.current_path_index]
 
-            if self.current_path_index < len(self.coverage_path):
-                target_row, target_col = self.coverage_path[self.current_path_index]
-                self.publish_waypoint(target_row, target_col)
+            if self.cell_state[tr][tc] in (CellState.RED, CellState.OBSTACLE):
                 self.current_path_index += 1
+                continue
+            if not self.needs_more_visits(tr, tc):
+                self.current_path_index += 1
+                continue
 
-        # If path exhausted, check for remaining uncovered cells
-        if self.current_path_index >= len(self.coverage_path):
+            # Found a valid target
+            self.publish_waypoint(tr, tc)
+            self.current_path_index += 1
+            waypoint_sent = True
+            break
+
+        # FIX 6: If the spanning-tree path is exhausted, look for frontier
+        # cells (FREE cells next to UNKNOWN cells) and drive there so the
+        # lidar can reveal new territory.  Then also check for remaining
+        # uncovered FREE cells.
+        if not waypoint_sent:
+            # --- Try frontier exploration first ---
+            frontier = self.find_nearest_frontier(row, col)
+            if frontier is not None:
+                fr, fc = frontier
+                self.get_logger().info(
+                    f'Path exhausted — driving to frontier ({fr},{fc})'
+                )
+                self.publish_waypoint(fr, fc)
+                # Force tree rebuild after reaching the frontier
+                self.tree_built = False
+                waypoint_sent = True
+
+        if not waypoint_sent:
+            # --- Try remaining uncovered FREE cells ---
             uncovered = []
             for r in range(self.grid_h):
                 for c in range(self.grid_w):
-                    if self.needs_more_visits(r, c):
+                    if (self.cell_state[r][c] == CellState.FREE
+                            and self.needs_more_visits(r, c)):
                         uncovered.append((r, c))
 
             if uncovered:
@@ -463,12 +513,28 @@ class PlannerNode(Node):
                     uncovered,
                     key=lambda cell: abs(cell[0] - row) + abs(cell[1] - col)
                 )
-                self.build_spanning_tree(row, col)
-                self.coverage_path = self.generate_coverage_path(row, col)
-                self.current_path_index = 0
                 self.get_logger().info(
                     f'Replanning: {len(uncovered)} cells still need coverage'
                 )
+                self.build_spanning_tree(row, col)
+                self.coverage_path = self.generate_coverage_path(row, col)
+                self.current_path_index = 0
+                # Send the first valid waypoint from the new path
+                while self.current_path_index < len(self.coverage_path):
+                    tr, tc = self.coverage_path[self.current_path_index]
+                    if self.cell_state[tr][tc] in (CellState.RED, CellState.OBSTACLE):
+                        self.current_path_index += 1
+                        continue
+                    if not self.needs_more_visits(tr, tc):
+                        self.current_path_index += 1
+                        continue
+                    self.publish_waypoint(tr, tc)
+                    self.current_path_index += 1
+                    waypoint_sent = True
+                    break
+
+        if not waypoint_sent:
+            self.get_logger().info('Coverage complete — no more cells to visit')
 
         self.publish_metrics()
 
@@ -480,7 +546,6 @@ class PlannerNode(Node):
         """Send a waypoint to the control node and notify the metrics node."""
         wx, wy = self.grid_to_world(target_row, target_col)
 
-        # Waypoint for control node
         waypoint = PoseStamped()
         waypoint.header.frame_id = 'odom'
         waypoint.header.stamp = self.get_clock().now().to_msg()
