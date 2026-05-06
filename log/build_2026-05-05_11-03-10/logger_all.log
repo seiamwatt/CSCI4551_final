@@ -1,0 +1,143 @@
+[0.093s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.093s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=28, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x79f7e252a510>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x79f7e252a0c0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x79f7e252a0c0>>, mixin_verb=('build',))
+[0.180s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.181s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.182s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/eiamw001/CSCI4511_project'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.187s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extensions ['ignore', 'ignore_ament_install']
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extension 'ignore'
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extension 'ignore_ament_install'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extensions ['colcon_pkg']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extension 'colcon_pkg'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extensions ['colcon_meta']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extension 'colcon_meta'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extensions ['ros']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extension 'ros'
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extensions ['cmake', 'python']
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extension 'cmake'
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extension 'python'
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extensions ['python_setup_py']
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(launches) by extension 'python_setup_py'
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.228s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.229s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.229s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.232s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.233s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.233s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.235s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.235s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.235s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.237s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.237s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.237s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.240s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.241s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extensions ['ignore', 'ignore_ament_install']
+[0.242s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extension 'ignore'
+[0.245s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extension 'ignore_ament_install'
+[0.247s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extensions ['colcon_pkg']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extension 'colcon_pkg'
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extensions ['colcon_meta']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extension 'colcon_meta'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extensions ['ros']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extension 'ros'
+[0.257s] DEBUG:colcon.colcon_core.package_identification:Failed to parse potential ROS package manifest in'src/security_coverage_robot': Error(s) in package 'src/security_coverage_robot/package.xml':
+The manifest contains invalid XML:
+junk after document element: line 2, column 0
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extensions ['cmake', 'python']
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extension 'cmake'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extension 'python'
+[0.263s] DEBUG:colcon.colcon_core.package_identification:Python package in 'src/security_coverage_robot' passes arguments to the setup() function which requires a different identification extension than 'python'
+[0.263s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extensions ['python_setup_py']
+[0.263s] Level 1:colcon.colcon_core.package_identification:_identify(src/security_coverage_robot) by extension 'python_setup_py'
+[0.520s] DEBUG:colcon.colcon_core.package_identification:Package 'src/security_coverage_robot' with type 'python' and name 'security_coverage_robot'
+[0.520s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.520s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.520s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.520s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.520s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.533s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.533s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.543s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /home/eiamw001/CSCI4511_project/install
+[0.544s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 554 installed packages in /opt/ros/jazzy
+[0.546s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'cmake_args' from command line to 'None'
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'cmake_target' from command line to 'None'
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'cmake_clean_cache' from command line to 'False'
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'cmake_clean_first' from command line to 'False'
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'cmake_force_configure' from command line to 'False'
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'ament_cmake_args' from command line to 'None'
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'catkin_cmake_args' from command line to 'None'
+[0.585s] Level 5:colcon.colcon_core.verb:set package 'security_coverage_robot' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.585s] DEBUG:colcon.colcon_core.verb:Building package 'security_coverage_robot' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/eiamw001/CSCI4511_project/build/security_coverage_robot', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/eiamw001/CSCI4511_project/install/security_coverage_robot', 'merge_install': False, 'path': '/home/eiamw001/CSCI4511_project/src/security_coverage_robot', 'symlink_install': False, 'test_result_base': None}
+[0.585s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.586s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.588s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/eiamw001/CSCI4511_project/src/security_coverage_robot'
+[0.591s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.592s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.592s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.590s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/eiamw001/CSCI4511_project/src/security_coverage_robot': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/eiamw001/CSCI4511_project/build/security_coverage_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages:${PYTHONPATH} _=/usr/bin/env /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/security_coverage_robot build --build-base /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build install --record /home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log --single-version-externally-managed install_data
+[2.665s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/eiamw001/CSCI4511_project/src/security_coverage_robot' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/eiamw001/CSCI4511_project/build/security_coverage_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages:${PYTHONPATH} _=/usr/bin/env /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/security_coverage_robot build --build-base /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build install --record /home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log --single-version-externally-managed install_data
+[2.674s] Level 1:colcon.colcon_core.environment:checking '/home/eiamw001/CSCI4511_project/install/security_coverage_robot' for CMake module files
+[2.681s] Level 1:colcon.colcon_core.environment:checking '/home/eiamw001/CSCI4511_project/install/security_coverage_robot' for CMake config files
+[2.692s] Level 1:colcon.colcon_core.environment:checking '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib'
+[2.693s] Level 1:colcon.colcon_core.environment:checking '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/bin'
+[2.693s] Level 1:colcon.colcon_core.environment:checking '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/pkgconfig/security_coverage_robot.pc'
+[2.693s] Level 1:colcon.colcon_core.environment:checking '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages'
+[2.693s] Level 1:colcon.colcon_core.shell:create_environment_hook('security_coverage_robot', 'pythonpath')
+[2.694s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/hook/pythonpath.ps1'
+[2.701s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/hook/pythonpath.dsv'
+[2.706s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/hook/pythonpath.sh'
+[2.712s] Level 1:colcon.colcon_core.environment:checking '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/bin'
+[2.712s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(security_coverage_robot)
+[2.712s] INFO:colcon.colcon_core.shell:Creating package script '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/package.ps1'
+[2.719s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/package.dsv'
+[2.724s] INFO:colcon.colcon_core.shell:Creating package script '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/package.sh'
+[2.729s] INFO:colcon.colcon_core.shell:Creating package script '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/package.bash'
+[2.733s] INFO:colcon.colcon_core.shell:Creating package script '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/package.zsh'
+[2.739s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/colcon-core/packages/security_coverage_robot)
+[2.744s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.745s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.746s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[2.746s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.758s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.758s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.760s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.770s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.770s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/eiamw001/CSCI4511_project/install/local_setup.ps1'
+[2.777s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/eiamw001/CSCI4511_project/install/_local_setup_util_ps1.py'
+[2.783s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/eiamw001/CSCI4511_project/install/setup.ps1'
+[2.789s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/eiamw001/CSCI4511_project/install/local_setup.sh'
+[2.794s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/eiamw001/CSCI4511_project/install/_local_setup_util_sh.py'
+[2.800s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/eiamw001/CSCI4511_project/install/setup.sh'
+[2.806s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/eiamw001/CSCI4511_project/install/local_setup.bash'
+[2.811s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/eiamw001/CSCI4511_project/install/setup.bash'
+[2.817s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/eiamw001/CSCI4511_project/install/local_setup.zsh'
+[2.822s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/eiamw001/CSCI4511_project/install/setup.zsh'

@@ -1,0 +1,5 @@
+[console_scripts]
+control_node = security_coverage_robot.control_node:main
+metrics_node = security_coverage_robot.metrics_node:main
+perception_node = security_coverage_robot.perception_node:main
+planner_node = security_coverage_robot.planner_node:main

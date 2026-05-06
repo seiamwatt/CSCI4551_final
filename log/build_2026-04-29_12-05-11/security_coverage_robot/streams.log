@@ -1,0 +1,26 @@
+[1.208s] Invoking command in '/home/eiamw001/CSCI4511_project/src/security_coverage_robot': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/eiamw001/CSCI4511_project/build/security_coverage_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages:${PYTHONPATH} _=/usr/bin/env /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/security_coverage_robot build --build-base /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build install --record /home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log --single-version-externally-managed install_data
+[1.592s] running egg_info
+[1.615s] writing ../../build/security_coverage_robot/security_coverage_robot.egg-info/PKG-INFO
+[1.623s] writing dependency_links to ../../build/security_coverage_robot/security_coverage_robot.egg-info/dependency_links.txt
+[1.629s] writing entry points to ../../build/security_coverage_robot/security_coverage_robot.egg-info/entry_points.txt
+[1.634s] writing requirements to ../../build/security_coverage_robot/security_coverage_robot.egg-info/requires.txt
+[1.641s] writing top-level names to ../../build/security_coverage_robot/security_coverage_robot.egg-info/top_level.txt
+[1.758s] [2;36m[04/29/26 12:05:14][0m[2;36m [0m[1;31mERROR   [0m listing git files failed - pretending     ]8;id=913378;file:///usr/lib/python3/dist-packages/setuptools_scm/_file_finders/git.py\[2mgit.py[0m]8;;\[2m:[0m]8;id=859533;file:///usr/lib/python3/dist-packages/setuptools_scm/_file_finders/git.py#24\[2m24[0m]8;;\
+[1.763s] [2;36m                    [0m         there aren't any                          [2m         [0m
+[1.915s] reading manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+[1.920s] writing manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+[1.928s] running build
+[1.935s] running build_py
+[1.942s] running install
+[1.949s] running install_lib
+[1.966s] running install_data
+[1.971s] running install_egg_info
+[1.997s] removing '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot-0.1.0-py3.12.egg-info' (and everything under it)
+[2.018s] Copying ../../build/security_coverage_robot/security_coverage_robot.egg-info to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot-0.1.0-py3.12.egg-info
+[2.123s] running install_scripts
+[2.306s] Installing control_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.313s] Installing metrics_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.321s] Installing perception_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.327s] Installing planner_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.335s] writing list of installed files to '/home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log'
+[2.366s] Invoked command in '/home/eiamw001/CSCI4511_project/src/security_coverage_robot' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/eiamw001/CSCI4511_project/build/security_coverage_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages:${PYTHONPATH} _=/usr/bin/env /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/security_coverage_robot build --build-base /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build install --record /home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log --single-version-externally-managed install_data

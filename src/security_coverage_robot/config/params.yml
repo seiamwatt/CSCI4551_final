@@ -1,0 +1,18 @@
+security_coverage_robot:
+  ros__parameters:
+    # Grid settings
+    grid_resolution: 0.5  # meters per cell
+    
+    # HSV color thresholds (H, S, V) - tune these in Gazebo
+    green_lower: [35, 80, 80]
+    green_upper: [85, 255, 255]
+    yellow_lower: [20, 80, 80]
+    yellow_upper: [35, 255, 255]
+    red_lower: [0, 80, 80]
+    red_upper: [10, 255, 255]
+    blue_lower: [100, 80, 80]
+    blue_upper: [130, 255, 255]
+    
+    # Robot speed
+    linear_speed: 0.3
+    angular_speed: 0.5

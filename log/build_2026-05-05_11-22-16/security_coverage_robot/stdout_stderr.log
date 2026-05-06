@@ -1,0 +1,24 @@
+running egg_info
+writing ../../build/security_coverage_robot/security_coverage_robot.egg-info/PKG-INFO
+writing dependency_links to ../../build/security_coverage_robot/security_coverage_robot.egg-info/dependency_links.txt
+writing entry points to ../../build/security_coverage_robot/security_coverage_robot.egg-info/entry_points.txt
+writing requirements to ../../build/security_coverage_robot/security_coverage_robot.egg-info/requires.txt
+writing top-level names to ../../build/security_coverage_robot/security_coverage_robot.egg-info/top_level.txt
+[2;36m[05/05/26 11:22:18][0m[2;36m [0m[1;31mERROR   [0m listing git files failed - pretending     ]8;id=111146;file:///usr/lib/python3/dist-packages/setuptools_scm/_file_finders/git.py\[2mgit.py[0m]8;;\[2m:[0m]8;id=166249;file:///usr/lib/python3/dist-packages/setuptools_scm/_file_finders/git.py#24\[2m24[0m]8;;\
+[2;36m                    [0m         there aren't any                          [2m         [0m
+reading manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+writing manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+running install_egg_info
+removing '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot-0.1.0-py3.12.egg-info' (and everything under it)
+Copying ../../build/security_coverage_robot/security_coverage_robot.egg-info to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot-0.1.0-py3.12.egg-info
+running install_scripts
+Installing control_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing metrics_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing perception_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing planner_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+writing list of installed files to '/home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log'

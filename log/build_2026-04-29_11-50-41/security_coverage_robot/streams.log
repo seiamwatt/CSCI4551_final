@@ -1,0 +1,60 @@
+[1.223s] Invoking command in '/home/eiamw001/CSCI4511_project/src/security_coverage_robot': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/eiamw001/CSCI4511_project/build/security_coverage_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages:${PYTHONPATH} _=/usr/bin/env /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/security_coverage_robot build --build-base /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build install --record /home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log --single-version-externally-managed install_data
+[1.604s] running egg_info
+[1.609s] creating ../../build/security_coverage_robot/security_coverage_robot.egg-info
+[1.629s] writing ../../build/security_coverage_robot/security_coverage_robot.egg-info/PKG-INFO
+[1.638s] writing dependency_links to ../../build/security_coverage_robot/security_coverage_robot.egg-info/dependency_links.txt
+[1.644s] writing entry points to ../../build/security_coverage_robot/security_coverage_robot.egg-info/entry_points.txt
+[1.648s] writing requirements to ../../build/security_coverage_robot/security_coverage_robot.egg-info/requires.txt
+[1.655s] writing top-level names to ../../build/security_coverage_robot/security_coverage_robot.egg-info/top_level.txt
+[1.660s] writing manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+[1.767s] [2;36m[04/29/26 11:50:43][0m[2;36m [0m[1;31mERROR   [0m listing git files failed - pretending     ]8;id=367890;file:///usr/lib/python3/dist-packages/setuptools_scm/_file_finders/git.py\[2mgit.py[0m]8;;\[2m:[0m]8;id=807325;file:///usr/lib/python3/dist-packages/setuptools_scm/_file_finders/git.py#24\[2m24[0m]8;;\
+[1.772s] [2;36m                    [0m         there aren't any                          [2m         [0m
+[1.879s] reading manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+[1.884s] writing manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+[1.891s] running build
+[1.896s] running build_py
+[1.896s] creating /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build
+[1.896s] creating /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib
+[1.896s] creating /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot
+[1.898s] copying security_coverage_robot/metrics_node.py -> /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot
+[1.906s] copying security_coverage_robot/planner_node.py -> /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot
+[1.914s] copying security_coverage_robot/perception_node.py -> /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot
+[1.923s] copying security_coverage_robot/control_node.py -> /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot
+[1.931s] copying security_coverage_robot/__init__.py -> /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot
+[1.937s] running install
+[1.944s] running install_lib
+[1.968s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot
+[1.971s] copying /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot/__init__.py -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot
+[1.979s] copying /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot/control_node.py -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot
+[1.989s] copying /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot/perception_node.py -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot
+[1.998s] copying /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot/metrics_node.py -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot
+[2.007s] copying /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build/lib/security_coverage_robot/planner_node.py -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot
+[2.019s] byte-compiling /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot/__init__.py to __init__.cpython-312.pyc
+[2.032s] byte-compiling /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot/control_node.py to control_node.cpython-312.pyc
+[2.045s] byte-compiling /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot/perception_node.py to perception_node.cpython-312.pyc
+[2.056s] byte-compiling /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot/metrics_node.py to metrics_node.cpython-312.pyc
+[2.068s] byte-compiling /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot/planner_node.py to planner_node.cpython-312.pyc
+[2.081s] running install_data
+[2.083s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share
+[2.085s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/ament_index
+[2.087s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/ament_index/resource_index
+[2.093s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/ament_index/resource_index/packages
+[2.095s] copying resource/security_coverage_robot -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/ament_index/resource_index/packages
+[2.099s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot
+[2.101s] copying package.xml -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot
+[2.111s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/launch
+[2.116s] copying launch/security_robot.launch.py -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/launch
+[2.123s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/worlds
+[2.125s] copying worlds/world1_simple.world -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/worlds
+[2.134s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/config
+[2.138s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/models
+[2.140s] creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/models/urdf
+[2.147s] running install_egg_info
+[2.176s] Copying ../../build/security_coverage_robot/security_coverage_robot.egg-info to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot-0.1.0-py3.12.egg-info
+[2.276s] running install_scripts
+[2.461s] Installing control_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.471s] Installing metrics_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.479s] Installing perception_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.485s] Installing planner_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.492s] writing list of installed files to '/home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log'
+[2.527s] Invoked command in '/home/eiamw001/CSCI4511_project/src/security_coverage_robot' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/eiamw001/CSCI4511_project/build/security_coverage_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages:${PYTHONPATH} _=/usr/bin/env /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/security_coverage_robot build --build-base /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build install --record /home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log --single-version-externally-managed install_data

@@ -1,0 +1,24 @@
+running egg_info
+writing ../../build/security_coverage_robot/security_coverage_robot.egg-info/PKG-INFO
+writing dependency_links to ../../build/security_coverage_robot/security_coverage_robot.egg-info/dependency_links.txt
+writing entry points to ../../build/security_coverage_robot/security_coverage_robot.egg-info/entry_points.txt
+writing requirements to ../../build/security_coverage_robot/security_coverage_robot.egg-info/requires.txt
+writing top-level names to ../../build/security_coverage_robot/security_coverage_robot.egg-info/top_level.txt
+reading manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+writing manifest file '../../build/security_coverage_robot/security_coverage_robot.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+copying launch/security_robot.launch.py -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/launch
+copying worlds/world1_simple.world -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/worlds
+running install_egg_info
+removing '/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot-0.1.0-py3.12.egg-info' (and everything under it)
+Copying ../../build/security_coverage_robot/security_coverage_robot.egg-info to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security_coverage_robot-0.1.0-py3.12.egg-info
+running install_scripts
+Installing control_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing metrics_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing perception_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing planner_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+writing list of installed files to '/home/eiamw001/CSCI4511_project/build/security_coverage_robot/install.log'

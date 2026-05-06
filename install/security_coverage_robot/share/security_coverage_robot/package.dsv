@@ -1,0 +1,3 @@
+source;share/security_coverage_robot/hook/pythonpath.ps1
+source;share/security_coverage_robot/hook/pythonpath.dsv
+source;share/security_coverage_robot/hook/pythonpath.sh
