@@ -76,9 +76,7 @@ def generate_launch_description():
     )
 
     # ros_gz bridge — without this our nodes get NO scan / odom / image, and
-    # /cmd_vel never reaches the simulated robot. Topic names below are the
-    # defaults exposed by the standard TB3 SDF; if your SDF publishes under
-    # /model/<robot>/... you'll need to remap these accordingly.
+    # /cmd_vel never reaches the simulated robot.
     gz_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
@@ -98,7 +96,50 @@ def generate_launch_description():
         parameters=[{'use_sim_time': use_sim_time}],
     )
 
-    # Our nodes
+    # ------------------------------------------------------------------ #
+    #  SLAM Toolbox — builds an occupancy grid map from /scan + /tf
+    #  Publishes: /map (nav_msgs/OccupancyGrid)
+    #  Broadcasts: map -> odom TF transform
+    # ------------------------------------------------------------------ #
+    slam_toolbox = Node(
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        name='slam_toolbox',
+        output='screen',
+        parameters=[{
+            'use_sim_time': True,
+
+            # Solver
+            'solver_plugin': 'solver_plugins::CeresSolver',
+            'ceres_linear_solver': 'SPARSE_NORMAL_CHOLESKY',
+            'ceres_preconditioner': 'SCHUR_JACOBI',
+
+            # Map resolution — match your planner grid (0.5 m) or go finer
+            'resolution': 0.05,
+
+            # Scan matching
+            'max_laser_range': 12.0,
+            'minimum_travel_distance': 0.3,
+            'minimum_travel_heading': 0.3,
+
+            # Map update
+            'map_update_interval': 2.0,
+            'transform_publish_period': 0.05,
+
+            # Frames — must match what your robot publishes
+            'odom_frame': 'odom',
+            'map_frame': 'map',
+            'base_frame': 'base_footprint',
+            'scan_topic': '/scan',
+
+            # Online (real-time) mode for live exploration
+            'mode': 'mapping',
+        }],
+    )
+
+    # ------------------------------------------------------------------ #
+    #  Our custom nodes
+    # ------------------------------------------------------------------ #
     common_params = [{'use_sim_time': use_sim_time}]
 
     perception = Node(
@@ -141,6 +182,7 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_turtlebot_cmd)
     ld.add_action(gz_bridge)
+    ld.add_action(slam_toolbox)       # <-- SLAM added here
     ld.add_action(perception)
     ld.add_action(planner)
     ld.add_action(control)
