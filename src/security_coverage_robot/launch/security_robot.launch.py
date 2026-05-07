@@ -189,9 +189,9 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_turtlebot_cmd)
     ld.add_action(gz_bridge)
-    # ld.add_action(slam_toolbox)
-    # ld.add_action(activate_slam)       # Configure after 5s
-    # ld.add_action(activate_slam_2)     # Activate after 8s
+    ld.add_action(slam_toolbox)
+    ld.add_action(activate_slam)       # Configure after 5s
+    ld.add_action(activate_slam_2)     # Activate after 8s
     ld.add_action(perception)
     ld.add_action(planner)
     ld.add_action(control)
