@@ -68,6 +68,9 @@ class PlannerNode(Node):
         # Lidar data
         self.latest_scan = None
 
+        # Latest zone color from perception (used as fallback)
+        self.current_perceived_zone = 'unknown'
+
         # --- Subscribers ---
         self.zone_sub = self.create_subscription(
             String, '/zone_color', self.zone_callback, 10
@@ -189,6 +192,9 @@ class PlannerNode(Node):
         if color == 'unknown':
             return
 
+        # Always track the latest perceived zone
+        self.current_perceived_zone = color
+
         old_color = self.zone_color[row][col]
         self.zone_color[row][col] = color
 
@@ -248,8 +254,19 @@ class PlannerNode(Node):
         self.visit_count[r][c] += 1
 
         # Now that the robot has arrived, send the *discovered* zone color
-        # to the metrics node (instead of at dispatch time when it was unknown)
+        # to the metrics node. If the cell's zone is still unknown (timing
+        # lag from perception), fall back to whatever the camera sees right now.
         color = self.zone_color[r][c]
+        if color == 'unknown' and self.current_perceived_zone != 'unknown':
+            color = self.current_perceived_zone
+            self.zone_color[r][c] = color
+            # Also apply zone rules for this color
+            if color == 'yellow':
+                self.required_visits[r][c] = 2
+            elif color == 'red':
+                self.cell_state[r][c] = CellState.RED
+                self.required_visits[r][c] = 0
+
         wx, wy = self.grid_to_world(r, c)
         zone_msg = String()
         zone_msg.data = f'waypoint_zone:{wx:.3f},{wy:.3f},{color}'

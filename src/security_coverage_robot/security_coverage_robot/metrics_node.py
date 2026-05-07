@@ -134,14 +134,12 @@ class MetricsNode(Node):
         self.zone_stats[new_zone]['entered'] += 1
 
     def waypoint_zone_callback(self, msg):
-        """Record the planner's waypoint dispatch.
+        """Record zone behavior when the robot reaches a cell.
 
         Expected format: "waypoint_zone:<x>,<y>,<color>"
 
-        Sending a waypoint to a RED cell is a planner-level violation and is
-        counted immediately. For all other colors we wait for the reach event
-        before crediting correctness — that way "behavior correctness"
-        reflects what the robot actually did, not just what was planned.
+        Since the planner now publishes this AFTER the robot arrives,
+        we credit correctness immediately here.
         """
         try:
             _, payload = msg.data.split(':', 1)
@@ -152,32 +150,16 @@ class MetricsNode(Node):
         except (ValueError, IndexError):
             return
 
-        if color == 'red':
-            self.total_behaviors += 1
-            self.red_coverage_attempts += 1
-            self.zone_stats['red']['violations'] += 1
-            self.pending_waypoint = None
-            self.get_logger().warn(
-                f'VIOLATION: Planner sent waypoint into RED zone at ({x_str}, {y_str})'
-            )
-            return
-
-        # Defer correctness credit until the cell is actually reached.
-        self.pending_waypoint = (x_str, y_str, color)
-
-    def reached_callback(self, msg):
-        """Credit correctness once the robot has actually reached the cell."""
-        self.waypoints_reached += 1
-
-        if self.pending_waypoint is None:
-            return
-
-        x_str, y_str, color = self.pending_waypoint
-        self.pending_waypoint = None
         cell_key = f'{x_str},{y_str}'
         self.total_behaviors += 1
 
-        if color == 'green':
+        if color == 'red':
+            self.red_coverage_attempts += 1
+            self.zone_stats['red']['violations'] += 1
+            self.get_logger().warn(
+                f'VIOLATION: Robot visited RED zone at ({x_str}, {y_str})'
+            )
+        elif color == 'green':
             self.zone_stats['green']['correct'] += 1
             self.correct_behaviors += 1
         elif color == 'yellow':
@@ -194,8 +176,12 @@ class MetricsNode(Node):
             self.zone_stats['blue']['correct'] += 1
             self.correct_behaviors += 1
         else:
-            # Unknown color reached — count the decision but not as correct.
+            # Unknown color — count the decision but not as correct.
             pass
+
+    def reached_callback(self, msg):
+        """Track waypoint reach count."""
+        self.waypoints_reached += 1
 
     def status_callback(self, msg):
         """Track stuck or skipped waypoints from control node."""
