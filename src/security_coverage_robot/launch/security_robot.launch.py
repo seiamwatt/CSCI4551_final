@@ -2,7 +2,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import AppendEnvironmentVariable, DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -75,8 +75,7 @@ def generate_launch_description():
         os.path.join(turtlebot3_gazebo, 'models')
     )
 
-    # ros_gz bridge — without this our nodes get NO scan / odom / image, and
-    # /cmd_vel never reaches the simulated robot.
+    # ros_gz bridge
     gz_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
@@ -97,9 +96,7 @@ def generate_launch_description():
     )
 
     # ------------------------------------------------------------------ #
-    #  SLAM Toolbox — builds an occupancy grid map from /scan + /tf
-    #  Publishes: /map (nav_msgs/OccupancyGrid)
-    #  Broadcasts: map -> odom TF transform
+    #  SLAM Toolbox (lifecycle node)
     # ------------------------------------------------------------------ #
     slam_toolbox = Node(
         package='slam_toolbox',
@@ -108,33 +105,43 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'use_sim_time': True,
-
-            # Solver
             'solver_plugin': 'solver_plugins::CeresSolver',
             'ceres_linear_solver': 'SPARSE_NORMAL_CHOLESKY',
             'ceres_preconditioner': 'SCHUR_JACOBI',
-
-            # Map resolution — match your planner grid (0.5 m) or go finer
             'resolution': 0.05,
-
-            # Scan matching
             'max_laser_range': 12.0,
             'minimum_travel_distance': 0.3,
             'minimum_travel_heading': 0.3,
-
-            # Map update
             'map_update_interval': 2.0,
             'transform_publish_period': 0.05,
-
-            # Frames — must match what your robot publishes
             'odom_frame': 'odom',
             'map_frame': 'map',
             'base_frame': 'base_footprint',
             'scan_topic': '/scan',
-
-            # Online (real-time) mode for live exploration
             'mode': 'mapping',
         }],
+    )
+
+    # Auto-activate the lifecycle node after 5 seconds
+    # (gives Gazebo and the bridge time to start first)
+    activate_slam = TimerAction(
+        period=5.0,
+        actions=[
+            ExecuteProcess(
+                cmd=['ros2', 'lifecycle', 'set', '/slam_toolbox', 'configure'],
+                output='screen'
+            ),
+        ]
+    )
+
+    activate_slam_2 = TimerAction(
+        period=8.0,
+        actions=[
+            ExecuteProcess(
+                cmd=['ros2', 'lifecycle', 'set', '/slam_toolbox', 'activate'],
+                output='screen'
+            ),
+        ]
     )
 
     # ------------------------------------------------------------------ #
@@ -182,7 +189,9 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_turtlebot_cmd)
     ld.add_action(gz_bridge)
-    ld.add_action(slam_toolbox)       # <-- SLAM added here
+    ld.add_action(slam_toolbox)
+    ld.add_action(activate_slam)       # Configure after 5s
+    ld.add_action(activate_slam_2)     # Activate after 8s
     ld.add_action(perception)
     ld.add_action(planner)
     ld.add_action(control)
