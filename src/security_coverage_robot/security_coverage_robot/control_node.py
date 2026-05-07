@@ -195,11 +195,7 @@ class ControlNode(Node):
             self.publish_cmd(0.0, 0.0)
             return
 
-        # ---- Red zone → skip immediately ---- #
-        if self.current_zone == 'red':
-            self.get_logger().info('In red zone (CCTV covered) — skipping waypoint')
-            self.publish_reached()
-            return
+        # (Red zone handling is done by the planner — control just navigates)
 
         max_linear = self.get_parameter('linear_speed').value
         max_angular = self.get_parameter('angular_speed').value

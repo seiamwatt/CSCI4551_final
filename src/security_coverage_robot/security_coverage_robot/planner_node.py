@@ -246,8 +246,17 @@ class PlannerNode(Node):
             pass
 
         self.visit_count[r][c] += 1
+
+        # Now that the robot has arrived, send the *discovered* zone color
+        # to the metrics node (instead of at dispatch time when it was unknown)
+        color = self.zone_color[r][c]
+        wx, wy = self.grid_to_world(r, c)
+        zone_msg = String()
+        zone_msg.data = f'waypoint_zone:{wx:.3f},{wy:.3f},{color}'
+        self.waypoint_zone_pub.publish(zone_msg)
+
         self.get_logger().info(
-            f'Cell ({r},{c}) visited — '
+            f'Cell ({r},{c}) visited [{color}] — '
             f'count={self.visit_count[r][c]}/'
             f'{self.required_visits[r][c]}'
         )
@@ -555,12 +564,6 @@ class PlannerNode(Node):
         waypoint.pose.orientation.w = 1.0
         self.waypoint_pub.publish(waypoint)
 
-        # Zone info for metrics node
-        color = self.zone_color[target_row][target_col]
-        zone_msg = String()
-        zone_msg.data = f'waypoint_zone:{wx:.3f},{wy:.3f},{color}'
-        self.waypoint_zone_pub.publish(zone_msg)
-
         # Track what we sent
         self.waiting_for_reach = True
         self.sent_waypoint_row = target_row
@@ -568,7 +571,7 @@ class PlannerNode(Node):
 
         self.get_logger().info(
             f'Waypoint -> ({target_row},{target_col}) '
-            f'[{color}] world=({wx:.2f},{wy:.2f})'
+            f'world=({wx:.2f},{wy:.2f})'
         )
 
     def publish_metrics(self):
