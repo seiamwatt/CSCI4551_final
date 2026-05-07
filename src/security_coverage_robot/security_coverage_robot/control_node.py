@@ -11,13 +11,9 @@ class ControlNode(Node):
     def __init__(self):
         super().__init__('control_node')
 
-        # custom 
-        self.declare_parameter('linear_speed',1)
-        self.declare_parameter('angular_speed', 0.5)
-
         # Parameters
-        # self.declare_parameter('linear_speed', 0.3)
-        # self.declare_parameter('angular_speed', 0.5)
+        self.declare_parameter('linear_speed', 0.3)
+        self.declare_parameter('angular_speed', 0.5)
         self.declare_parameter('goal_tolerance', 0.25)
         self.declare_parameter('obstacle_distance', 0.4)
         self.declare_parameter('kp_linear', 0.5)
