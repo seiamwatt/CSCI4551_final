@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import PoseStamped, Twist, TwistStamped
+from geometry_msgs.msg import PoseStamped, Twist
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import String
@@ -68,7 +68,7 @@ class ControlNode(Node):
         )
 
         # --- Publishers ---
-        self.cmd_pub = self.create_publisher(TwistStamped, '/cmd_vel', 10)
+        self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
         self.reached_pub = self.create_publisher(String, '/waypoint_reached', 10)
         self.status_pub = self.create_publisher(String, '/control_status', 10)
 
@@ -181,13 +181,11 @@ class ControlNode(Node):
     # ------------------------------------------------------------------ #
 
     def publish_cmd(self, linear_x, angular_z):
-        """Wrap velocity into TwistStamped and publish."""
-        stamped = TwistStamped()
-        stamped.header.stamp = self.get_clock().now().to_msg()
-        stamped.header.frame_id = 'base_link'
-        stamped.twist.linear.x = linear_x
-        stamped.twist.angular.z = angular_z
-        self.cmd_pub.publish(stamped)
+        """Wrap velocity into Twist and publish."""
+        cmd = Twist()
+        cmd.linear.x = linear_x
+        cmd.angular.z = angular_z
+        self.cmd_pub.publish(cmd)
 
     def control_loop(self):
         """Navigate to waypoint while avoiding obstacles and respecting zones."""
