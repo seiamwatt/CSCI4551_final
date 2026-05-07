@@ -1,0 +1,21 @@
+running develop
+running egg_info
+writing security_coverage_robot.egg-info/PKG-INFO
+writing dependency_links to security_coverage_robot.egg-info/dependency_links.txt
+writing entry points to security_coverage_robot.egg-info/entry_points.txt
+writing requirements to security_coverage_robot.egg-info/requires.txt
+writing top-level names to security_coverage_robot.egg-info/top_level.txt
+writing manifest file 'security_coverage_robot.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security-coverage-robot.egg-link (link to .)
+Installing control_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing metrics_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing perception_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+Installing planner_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+
+Installed /home/eiamw001/CSCI4511_project/build/security_coverage_robot
+running symlink_data
+symbolically linking /home/eiamw001/CSCI4511_project/build/security_coverage_robot/resource/security_coverage_robot -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/ament_index/resource_index/packages
+symbolically linking /home/eiamw001/CSCI4511_project/build/security_coverage_robot/package.xml -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot
+symbolically linking /home/eiamw001/CSCI4511_project/build/security_coverage_robot/launch/security_robot.launch.py -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/launch
+symbolically linking /home/eiamw001/CSCI4511_project/build/security_coverage_robot/worlds/world1_simple.world -> /home/eiamw001/CSCI4511_project/install/security_coverage_robot/share/security_coverage_robot/worlds

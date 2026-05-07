@@ -1,3 +1,6 @@
 source;share/security_coverage_robot/hook/pythonpath.ps1
 source;share/security_coverage_robot/hook/pythonpath.dsv
 source;share/security_coverage_robot/hook/pythonpath.sh
+source;../../build/security_coverage_robot/share/security_coverage_robot/hook/pythonpath_develop.ps1
+source;../../build/security_coverage_robot/share/security_coverage_robot/hook/pythonpath_develop.dsv
+source;../../build/security_coverage_robot/share/security_coverage_robot/hook/pythonpath_develop.sh

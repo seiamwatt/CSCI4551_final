@@ -1,0 +1,19 @@
+[1.230s] Invoking command in '/home/eiamw001/CSCI4511_project/build/security_coverage_robot': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/eiamw001/CSCI4511_project/build/security_coverage_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages:${PYTHONPATH} _=/usr/bin/env /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build --no-deps symlink_data
+[1.718s] running develop
+[1.977s] running egg_info
+[2.002s] writing security_coverage_robot.egg-info/PKG-INFO
+[2.009s] writing dependency_links to security_coverage_robot.egg-info/dependency_links.txt
+[2.016s] writing entry points to security_coverage_robot.egg-info/entry_points.txt
+[2.024s] writing requirements to security_coverage_robot.egg-info/requires.txt
+[2.032s] writing top-level names to security_coverage_robot.egg-info/top_level.txt
+[2.564s] writing manifest file 'security_coverage_robot.egg-info/SOURCES.txt'
+[2.625s] running build_ext
+[2.630s] Creating /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages/security-coverage-robot.egg-link (link to .)
+[2.638s] Installing control_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.646s] Installing metrics_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.654s] Installing perception_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.662s] Installing planner_node script to /home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/security_coverage_robot
+[2.672s] 
+[2.677s] Installed /home/eiamw001/CSCI4511_project/build/security_coverage_robot
+[2.685s] running symlink_data
+[2.710s] Invoked command in '/home/eiamw001/CSCI4511_project/build/security_coverage_robot' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/eiamw001/CSCI4511_project/build/security_coverage_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/eiamw001/CSCI4511_project/install/security_coverage_robot/lib/python3.12/site-packages:${PYTHONPATH} _=/usr/bin/env /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/eiamw001/CSCI4511_project/build/security_coverage_robot/build --no-deps symlink_data
