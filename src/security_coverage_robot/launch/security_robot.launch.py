@@ -15,8 +15,12 @@ def generate_launch_description():
     ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    x_pose = LaunchConfiguration('x_pose', default='0.0')
-    y_pose = LaunchConfiguration('y_pose', default='0.0')
+
+    # edit to 0 if in middlte
+
+    # spawns bottom left
+    x_pose = LaunchConfiguration('x_pose', default='-5.5') 
+    y_pose = LaunchConfiguration('y_pose', default='-5.5')
     world_file = LaunchConfiguration('world_file')
 
     declare_world_file = DeclareLaunchArgument(
